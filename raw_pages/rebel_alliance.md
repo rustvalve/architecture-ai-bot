@@ -1,0 +1,1 @@
+#REDIRECT Alliance to Restore the Republic
