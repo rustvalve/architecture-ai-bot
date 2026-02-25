@@ -8,12 +8,18 @@
 from __future__ import annotations
 
 import json
+import logging
 import os
+from functools import lru_cache
 from pathlib import Path
 
 _PROJECT_ROOT = Path(__file__).resolve().parent
 os.environ.setdefault("HF_HOME", str(_PROJECT_ROOT / ".cache" / "huggingface"))
 os.environ.setdefault("TRANSFORMERS_CACHE", str(_PROJECT_ROOT / ".cache" / "transformers"))
+# Подавляем информационные логи из transformers и sentence-transformers
+os.environ.setdefault("TRANSFORMERS_VERBOSITY", "error")
+logging.getLogger("sentence_transformers").setLevel(logging.ERROR)
+logging.getLogger("transformers").setLevel(logging.ERROR)
 
 CHUNKS_PATH = _PROJECT_ROOT / "knowledge_base_chunks.json"
 METADATA_JSON_PATH = _PROJECT_ROOT / "knowledge_base_metadata.json"
@@ -21,8 +27,9 @@ FAISS_INDEX_PATH = _PROJECT_ROOT / "knowledge_base_faiss.index"
 BGE_MODEL_NAME = "BAAI/bge-base-en-v1.5"
 
 
+@lru_cache(maxsize=1)
 def _load_index_data():
-    """Загружает чанки, метаданные и индекс FAISS."""
+    """Загружает чанки, метаданные и индекс FAISS. Кэшируется на весь процесс."""
     import faiss
 
     with open(CHUNKS_PATH, "r", encoding="utf-8") as f:
@@ -38,6 +45,14 @@ def _load_index_data():
     return chunks, metadata_list, index
 
 
+@lru_cache(maxsize=4)
+def _load_model(model_name: str = BGE_MODEL_NAME):
+    """Загружает SentenceTransformer один раз и кэширует на весь процесс."""
+    from sentence_transformers import SentenceTransformer
+    cache_dir = _PROJECT_ROOT / ".cache" / "sentence_transformers"
+    return SentenceTransformer(model_name, cache_folder=str(cache_dir))
+
+
 def search(
     query: str,
     n_results: int = 5,
@@ -48,13 +63,11 @@ def search(
     Возвращает список dict с ключами: id, document, metadata, distance (cosine distance, 0 = best).
     """
     import numpy as np
-    from sentence_transformers import SentenceTransformer
 
     chunks, metadata_list, index = _load_index_data()
     n_results = min(n_results, len(chunks))
 
-    cache_dir = _PROJECT_ROOT / ".cache" / "sentence_transformers"
-    model = SentenceTransformer(model_name, cache_folder=str(cache_dir))
+    model = _load_model(model_name)
     query_embedding = model.encode(
         query,
         normalize_embeddings=True,
