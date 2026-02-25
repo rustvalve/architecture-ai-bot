@@ -1,2 +1,6 @@
 requests>=2.31.0
 Faker>=24.0.0
+langchain-text-splitters>=0.3.0
+langchain-core>=0.3.0
+sentence-transformers>=3.0.0
+faiss-cpu>=1.7.0
