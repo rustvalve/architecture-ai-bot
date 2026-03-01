@@ -1,8 +1,12 @@
 #!/usr/bin/env python3
 """
-Download 30+ pages from Wookieepedia (Star Wars Fandom wiki), strip wiki markup,
-and save as plain text in raw_pages/. One file per entity.
+Download pages from Wookieepedia (Star Wars Fandom wiki), strip wiki markup,
+and save as plain text. One file per entity.
+
+Default mode: fetches PAGES -> raw_pages/
+Update mode (--update): fetches PAGES_UPDATE -> docs/  (skips knowledge_base pipeline)
 """
+import argparse
 import re
 import time
 from pathlib import Path
@@ -10,7 +14,8 @@ from pathlib import Path
 import requests
 
 API_URL = "https://starwars.fandom.com/api.php"
-OUTPUT_DIR = Path(__file__).resolve().parent.parent / "raw_pages"
+RAW_DIR = Path(__file__).resolve().parent.parent / "raw_pages"
+DOCS_DIR = Path(__file__).resolve().parent.parent / "docs"
 DELAY_SECONDS = 1
 
 # 35+ page titles to fetch (characters, planets, tech, organizations, races, concepts)
@@ -53,6 +58,12 @@ PAGES = [
     "Hutt",
     "The Force",
     "Star Destroyer",
+]
+
+# Pages to fetch in update mode (--update). Results go to docs/, NOT raw_pages/.
+# These pages are meant to be served as-is and do NOT enter the knowledge_base pipeline.
+PAGES_UPDATE = [
+    "Mandalorian",
 ]
 
 
@@ -140,18 +151,33 @@ def fetch_page_plain_text(title: str) -> str | None:
 
 
 def main() -> None:
-    OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
-    print(f"Fetching {len(PAGES)} pages from Wookieepedia -> {OUTPUT_DIR}")
+    parser = argparse.ArgumentParser(description="Fetch pages from Wookieepedia.")
+    parser.add_argument(
+        "--update",
+        action="store_true",
+        help="Fetch PAGES_UPDATE and save to docs/ instead of raw_pages/.",
+    )
+    args = parser.parse_args()
+
+    if args.update:
+        pages = PAGES_UPDATE
+        output_dir = DOCS_DIR
+    else:
+        pages = PAGES
+        output_dir = RAW_DIR
+
+    output_dir.mkdir(parents=True, exist_ok=True)
+    print(f"Fetching {len(pages)} pages from Wookieepedia -> {output_dir}")
     success = 0
-    for i, title in enumerate(PAGES, 1):
-        print(f"[{i}/{len(PAGES)}] {title}")
+    for i, title in enumerate(pages, 1):
+        print(f"[{i}/{len(pages)}] {title}")
         text = fetch_page_plain_text(title)
         if text:
-            path = OUTPUT_DIR / f"{slugify(title)}.md"
+            path = output_dir / f"{slugify(title)}.md"
             path.write_text(text, encoding="utf-8")
             success += 1
         time.sleep(DELAY_SECONDS)
-    print(f"Done. Saved {success}/{len(PAGES)} pages.")
+    print(f"Done. Saved {success}/{len(pages)} pages.")
 
 
 if __name__ == "__main__":

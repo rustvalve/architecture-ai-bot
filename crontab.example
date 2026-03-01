@@ -1,0 +1,26 @@
+# Cron: автоматическое обновление индекса базы знаний
+#
+# Установка:
+#   1. Подставьте свой путь к проекту и к интерпретатору Python:
+#      PROJECT=/path/to/architecture-ai-bot
+#      PYTHON=/path/to/python  # или python3
+#   2. Выполните: crontab -e
+#   3. Вставьте строку задания (без комментариев), заменив PROJECT и PYTHON.
+#
+# Пример (запуск каждый день в 06:00 по локальному времени):
+#
+# 0 6 * * * cd /path/to/architecture-ai-bot && /usr/bin/python3 update_index.py >> logs/cron.log 2>&1
+#
+# Частота:
+#   - Каждый день в 06:00:  0 6 * * *
+#   - Каждые 12 часов:      0 */12 * * *
+#   - Каждый понедельник в 03:00:  0 3 * * 1
+#
+# При ошибке:
+#   - Скрипт пишет запись с "status": "error" в logs/update_index.log.
+#   - stdout/stderr попадают в logs/cron.log (см. перенаправление выше).
+#   - Скрипт завершается с кодом 1 при ошибке (для мониторинга).
+#
+# Проверка логов:
+#   tail -f logs/cron.log
+#   tail -n 5 logs/update_index.log

@@ -8,5 +8,6 @@ knowledge_base_faiss.index
 knowledge_base_chunks.json
 knowledge_base_metadata.json
 index_info.json
+.index_state.json
 
 telegram_bot/.env

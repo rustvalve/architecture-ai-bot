@@ -1,0 +1,57 @@
+@startuml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Container.puml
+
+title Пайплайн инкрементального обновления индекса
+
+System_Boundary(UpdatePipeline, "Update Pipeline") {
+
+  ContainerDb(DocsDir, "docs/*.md", "Filesystem", "Обновлённые markdown-документы (источник данных)")
+
+  Container(UpdateIndex, "update_index.py", "Python", "Сканирует docs/, вычисляет MD5-diff, добавляет/удаляет чанки, пересобирает FAISS")
+
+  ContainerDb(IndexState, ".index_state.json", "JSON", "Состояние индекса: MD5, mtime, n_chunks по каждому файлу")
+
+  Container(Chunker, "chunk_knowledge_base.py", "Python, LangChain", "RecursiveCharacterTextSplitter (chunk=2000, overlap=200)")
+  Container(Embedder, "embed_chunks.py", "Python, SentenceTransformers", "Модель BAAI/bge-base-en-v1.5 (dim=768)")
+}
+
+System_Boundary(IndexArtifacts, "Артефакты индекса") {
+  ContainerDb(ChunksJson, "knowledge_base_chunks.json", "JSON", "Чанки: content + metadata")
+  ContainerDb(EmbeddingsNpy, "knowledge_base_embeddings.npy", "NumPy", "Векторы эмбеддингов (dim=768)")
+  ContainerDb(MetadataJson, "knowledge_base_metadata.json", "JSON", "Метаданные чанков (source, chunk_id, позиции)")
+  ContainerDb(FaissIndex, "knowledge_base_faiss.index", "FAISS", "IndexFlatIP — cosine similarity поиск")
+}
+
+System_Boundary(Logging, "Логирование") {
+  ContainerDb(UpdateLog, "logs/update_index.log", "JSONL", "timestamp, status, duration, files added/modified/deleted")
+  ContainerDb(CronLog, "logs/cron.log", "Text", "stdout/stderr от cron")
+}
+
+System_Boundary(Scheduler, "Планировщик") {
+  Container(Cron, "cron", "crontab", "0 6 * * * — ежедневно в 06:00")
+}
+
+' === Поток данных ===
+Rel(DocsDir, UpdateIndex, "Сканирует .md файлы, вычисляет MD5")
+Rel(IndexState, UpdateIndex, "Предыдущее состояние файлов")
+Rel(UpdateIndex, IndexState, "Обновляет состояние")
+
+Rel(UpdateIndex, Chunker, "Новые/изменённые файлы")
+Rel(Chunker, ChunksJson, "Записывает чанки")
+Rel(UpdateIndex, ChunksJson, "Удаляет чанки удалённых файлов")
+
+Rel(ChunksJson, Embedder, "Тексты чанков")
+Rel(Embedder, EmbeddingsNpy, "Сохраняет векторы")
+Rel(Embedder, MetadataJson, "Сохраняет метаданные")
+Rel(UpdateIndex, FaissIndex, "Пересобирает FAISS-индекс")
+
+' === Логирование ===
+Rel(UpdateIndex, UpdateLog, "Пишет JSONL-запись")
+Rel(Cron, CronLog, "Перенаправляет stdout/stderr")
+
+' === Запуск ===
+Rel(Cron, UpdateIndex, "python update_index.py", "shell")
+
+SHOW_LEGEND()
+
+@enduml

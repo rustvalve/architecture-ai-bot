@@ -1,15 +1,20 @@
 #!/usr/bin/env python3
 """
-Replace all Star Wars terms in raw_pages/ with fictional terms from terms_map.json
-and save results to knowledge_base/. Preserves original case when replacing.
+Replace all Star Wars terms in source files with fictional terms from terms_map.json.
+Preserves original case when replacing.
+
+Default mode: reads raw_pages/ -> writes knowledge_base/
+Update mode (--update): reads docs/ -> writes docs/ in-place (no knowledge_base pipeline)
 """
+import argparse
 import json
 import re
 from pathlib import Path
 
 TERMS_MAP_PATH = Path(__file__).resolve().parent / "terms_map.json"
 RAW_DIR = Path(__file__).resolve().parent.parent / "raw_pages"
-OUTPUT_DIR = Path(__file__).resolve().parent.parent / "knowledge_base"
+KNOWLEDGE_BASE_DIR = Path(__file__).resolve().parent.parent / "knowledge_base"
+DOCS_DIR = Path(__file__).resolve().parent.parent / "docs"
 
 
 def slugify(name: str) -> str:
@@ -43,6 +48,14 @@ def replace_preserve_case(text: str, old: str, new: str) -> tuple[str, int]:
 
 
 def main() -> None:
+    parser = argparse.ArgumentParser(description="Replace Star Wars terms with fictional ones.")
+    parser.add_argument(
+        "--update",
+        action="store_true",
+        help="Read docs/ and write back to docs/ in-place (skips knowledge_base pipeline).",
+    )
+    args = parser.parse_args()
+
     with open(TERMS_MAP_PATH, encoding="utf-8") as f:
         data = json.load(f)
     terms = data.get("terms", {})
@@ -52,12 +65,19 @@ def main() -> None:
     # Sort by length descending so "Darth Vader" is replaced before "Darth"
     sorted_pairs = sorted(terms.items(), key=lambda x: -len(x[0]))
 
-    OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
-    raw_files = list(RAW_DIR.glob("*.md"))
-    if not raw_files:
-        raise SystemExit(f"No .md files in {RAW_DIR}. Run 1_fetch_pages.py first.")
+    if args.update:
+        input_dir = DOCS_DIR
+        output_dir = DOCS_DIR
+    else:
+        input_dir = RAW_DIR
+        output_dir = KNOWLEDGE_BASE_DIR
 
-    print(f"Replacing terms in {len(raw_files)} files -> {OUTPUT_DIR}")
+    output_dir.mkdir(parents=True, exist_ok=True)
+    raw_files = list(input_dir.glob("*.md"))
+    if not raw_files:
+        raise SystemExit(f"No .md files in {input_dir}. Run 1_fetch_pages.py{'  --update' if args.update else ''} first.")
+
+    print(f"Replacing terms in {len(raw_files)} files from {input_dir} -> {output_dir}")
     total_replacements = 0
 
     for path in sorted(raw_files):
@@ -68,12 +88,17 @@ def main() -> None:
             file_replacements += n
         total_replacements += file_replacements
 
-        # Output filename: use new name for this entity (original page title -> term replacement)
-        stem = path.stem
-        original_title = title_from_slug(stem)
-        new_name = terms.get(original_title, original_title)
-        new_slug = slugify(new_name)
-        out_path = OUTPUT_DIR / f"{new_slug}.md"
+        if args.update:
+            # In update mode: overwrite in-place, keep original filename
+            out_path = output_dir / path.name
+        else:
+            # Default mode: rename file using term replacement map
+            stem = path.stem
+            original_title = title_from_slug(stem)
+            new_name = terms.get(original_title, original_title)
+            new_slug = slugify(new_name)
+            out_path = output_dir / f"{new_slug}.md"
+
         out_path.write_text(text, encoding="utf-8")
         print(f"  {path.name} -> {out_path.name}  ({file_replacements} replacements)")
 

@@ -7,7 +7,7 @@ from langchain_core.documents import Document
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 
 
-# Директория с исходными .md и выходной файл чанков
+# Директория с исходными .md (база знаний по умолчанию для build_index) и выходной файл чанков
 KNOWLEDGE_BASE_DIR = Path(__file__).resolve().parent / "knowledge_base"
 CHUNKS_OUTPUT_PATH = Path(__file__).resolve().parent / "knowledge_base_chunks.json"
 
