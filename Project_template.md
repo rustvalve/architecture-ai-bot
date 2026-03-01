@@ -259,7 +259,19 @@ python example_query.py
 **Пример записи лога при успешном обновлении:**
 
 ```json
-{"timestamp": "2025-07-17T06:00:12", "status": "success", "duration_seconds": 15.4, "files_added": 2, "files_modified": 1, "files_deleted": 0, "new_chunks": 18, "removed_chunks": 7, "total_chunks": 1037, "index_size": 1037, "errors": []}
+{
+  "timestamp": "2025-07-17T06:00:12",
+  "status": "success",
+  "duration_seconds": 15.4,
+  "files_added": 2,
+  "files_modified": 1,
+  "files_deleted": 0,
+  "new_chunks": 18,
+  "removed_chunks": 7,
+  "total_chunks": 1037,
+  "index_size": 1037,
+  "errors": []
+}
 ```
 
 ## Тестирование обновления индекса
@@ -268,3 +280,71 @@ python example_query.py
 2. Из корня проекта выполните: `python update_index.py`.
 3. Проверьте лог: `tail -n 1 logs/update_index.log` — должна быть запись со `status: success`, увеличенным `total_chunks` и т.п.
 4. При необходимости проверьте ответы бота по новому/изменённому контенту.
+
+# Задание 7
+
+### 1. Искусственные пробелы в базе знаний ✅
+
+Удалены 3 ключевые сущности из `knowledge_base/` и сохранены в `knowledge_base_backup/`:
+
+- `void_core.md` — Void Core (аналог Death Star)
+- `flux_blade.md` — Flux Blade (аналог Lightsaber)
+- `solrath.md` — Solrath (аналог Tatooine)
+
+Индекс пересобран: **970 чанков** (было 1045, стало -75 чанков).
+
+### 2. Логирование запросов ✅
+
+Создан модуль **`query_logger.py`** с функцией `ask_and_log()`:
+
+- Сохраняет каждый запрос в `logs/query_log.jsonl`
+- Поля лога: `timestamp`, `query`, `chunks_found`, `answer_length`, `sources`, `success`, `success_reason`
+- Логика определения успешности:
+  - `success = False` → если ответ содержит "I don't know" / "not enough information" или длина < 50 символов
+  - `success = True` → в остальных случаях
+
+**Модификация `rag_pipeline.py`**: добавлено поле `source_documents` в возвращаемый dict для полного логирования.
+
+### 3. Золотой набор вопросов ✅
+
+Создан файл **`golden_questions.json`** с 13 вопросами:
+
+**8 вопросов на известные темы:**
+
+1. What is the Aetherian Order?
+2. Who is Kael Draven?
+3. What is the Dominion of Krath?
+4. What is Synth Flux?
+5. Who is Master Zephyr?
+6. Describe the planet Axiom Prime
+7. What is the Umbral Order?
+8. Who are the Thornwardens?
+
+**5 вопросов на удалённые/отсутствующие темы:** 9. What is the Void Core and how was it destroyed? (удалён) 10. Describe the different types of Flux Blades (удалён) 11. What is the geography of Solrath? (удалён) 12. What is the political system of the Galactic Senate in Synthara Chronicles? (нет в базе) 13. Who is Darth Revan in the Synthara Chronicles universe? (нет в базе)
+
+**Результаты тестирования:**
+
+- **Общая точность: 76.9% (10/13)**
+- Успешные вопросы: 7/8 корректно (87.5%)
+- Неудачные вопросы: 3/5 корректно (60%)
+
+**Ошибки:**
+
+1. ID 1: "What is the Aetherian Order?" — бот ответил "I don't know" несмотря на наличие источника
+2. ID 10: "Describe the different types of Flux Blades" — бот дал ответ, хотя `flux_blade.md` удалён (использовал другие источники)
+3. ID 11: "What is the geography of Solrath?" — бот дал ответ, хотя `solrath.md` удалён (использовал другие источники)
+
+### 5. Анализ логов ✅
+
+📊 **Общая статистика:**
+
+- Всего запросов: 13
+- Успешных: 9 (69.2%)
+- Неудачных: 4 (30.8%)
+
+📏 **Средняя длина ответа:**
+
+- Успешные: 1327 символов
+- Неудачные: 792 символов
+
+Тема Aetherian Order требует доработки, т.к. бот не ответил на вопрос, хотя данные есть.

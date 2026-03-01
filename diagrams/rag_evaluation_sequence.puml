@@ -1,0 +1,109 @@
+@startuml
+title Sequence Diagram: RAG Bot Evaluation Pipeline
+
+actor User
+participant "evaluate.py" as Eval
+participant "query_logger.py" as Logger
+participant "rag_pipeline.py" as RAG
+participant "faiss_index.py" as FAISS
+database "FAISS Index" as Index
+participant "Ollama LLM" as LLM
+database "logs/query_log.jsonl" as Log
+database "evaluation_report.json" as Report
+
+User -> Eval: Run evaluation on golden set
+activate Eval
+
+loop For each question in golden_questions.json
+    Eval -> Logger: ask_and_log(query)
+    activate Logger
+    
+    Logger -> RAG: ask(query, n_results=5)
+    activate RAG
+    
+    RAG -> FAISS: search(query, n_results=5)
+    activate FAISS
+    
+    FAISS -> Index: Embed query & k-NN search
+    activate Index
+    
+    alt Chunks found (index has data)
+        Index --> FAISS: top-k chunks with metadata
+        deactivate Index
+        
+        FAISS --> RAG: List[Document]
+        deactivate FAISS
+        
+        RAG -> RAG: Build few-shot prompt\nwith context from chunks
+        
+        RAG -> LLM: Few-shot prompt +\ncontext + user query
+        activate LLM
+        
+        LLM --> RAG: Generated answer
+        deactivate LLM
+        
+        RAG --> Logger: {answer, sources,\nsource_documents}
+        deactivate RAG
+        
+    else Empty index / No relevant chunks
+        Index --> FAISS: Empty result
+        deactivate Index
+        
+        FAISS --> RAG: []
+        deactivate FAISS
+        
+        note right of RAG
+            No context available
+            for the question
+        end note
+        
+        RAG -> LLM: Few-shot prompt +\nno context + user query
+        activate LLM
+        
+        LLM --> RAG: "I don't know" or\n"not enough information"
+        deactivate LLM
+        
+        RAG --> Logger: {answer: "I don't know",\nsources: [], source_documents: []}
+        deactivate RAG
+    end
+    
+    Logger -> Logger: Evaluate success:\n- Check for "I don't know"\n- Check answer length\n- Determine success flag
+    
+    Logger -> Log: Append JSONL entry:\n{timestamp, query,\nchunks_found, success, ...}
+    
+    Logger --> Eval: {answer, sources,\nsource_documents, log}
+    deactivate Logger
+    
+    Eval -> Eval: Compare actual_success\nwith expected_success\n+ Check keywords\n+ Check sources
+    
+end
+
+Eval -> Eval: Calculate statistics:\n- Accuracy\n- Failed questions\n- Source mismatches
+
+Eval -> Report: Save evaluation report\n(JSON format)
+
+Eval --> User: Print report:\n- Accuracy\n- Failed cases\n- Recommendations
+
+deactivate Eval
+
+note over Index
+  **Failure Points:**
+  
+  1. **Empty FAISS Index**
+     - No files in knowledge_base/
+     - Index not built
+  
+  2. **Invalid/Empty Chunks**
+     - Chunking failed
+     - Document parsing errors
+  
+  3. **Ollama Unavailable**
+     - Service not running
+     - Network timeout
+  
+  4. **Low Relevance**
+     - Query embedding mismatch
+     - Wrong embedding model
+end note
+
+@enduml

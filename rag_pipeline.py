@@ -180,6 +180,7 @@ def ask(
     Возвращает dict с ключами:
       answer  — строка с ответом LLM
       sources — список имён файлов-источников
+      source_documents — список Document объектов (для логирования)
     """
     chain = _build_chain(model=model, n_results=n_results)
     result = chain.invoke({"query": query})
@@ -189,6 +190,7 @@ def ask(
     return {
         "answer": result["result"],
         "sources": sources,
+        "source_documents": result["source_documents"],
     }
 
 
