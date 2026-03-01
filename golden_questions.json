@@ -1,0 +1,106 @@
+[
+  {
+    "id": 1,
+    "question": "What is the Aetherian Order?",
+    "expected_success": true,
+    "topic": "Aetherian Order",
+    "expected_source": "aetherian_order.md",
+    "expected_keywords": ["monastic", "synth flux", "religious order", "warriors"]
+  },
+  {
+    "id": 2,
+    "question": "Who is Kael Draven?",
+    "expected_success": true,
+    "topic": "Kael Draven",
+    "expected_source": "kael_draven.md",
+    "expected_keywords": ["aetherian", "warrior", "hero"]
+  },
+  {
+    "id": 3,
+    "question": "What is the Dominion of Krath?",
+    "expected_success": true,
+    "topic": "Dominion of Krath",
+    "expected_source": "dominion_of_krath.md",
+    "expected_keywords": ["empire", "dominion", "authoritarian"]
+  },
+  {
+    "id": 4,
+    "question": "What is Synth Flux?",
+    "expected_success": true,
+    "topic": "Synth Flux",
+    "expected_source": "synth_flux.md",
+    "expected_keywords": ["energy", "field", "force", "power"]
+  },
+  {
+    "id": 5,
+    "question": "Who is Master Zephyr?",
+    "expected_success": true,
+    "topic": "Master Zephyr",
+    "expected_source": "master_zephyr.md",
+    "expected_keywords": ["aetherian", "master", "teacher"]
+  },
+  {
+    "id": 6,
+    "question": "Describe the planet Axiom Prime",
+    "expected_success": true,
+    "topic": "Axiom Prime",
+    "expected_source": "axiom_prime.md",
+    "expected_keywords": ["planet", "capital", "city"]
+  },
+  {
+    "id": 7,
+    "question": "What is the Umbral Order?",
+    "expected_success": true,
+    "topic": "Umbral Order",
+    "expected_source": "umbral.md",
+    "expected_keywords": ["umbral", "dark", "order"]
+  },
+  {
+    "id": 8,
+    "question": "Who are the Thornwardens?",
+    "expected_success": true,
+    "topic": "Thornwardens",
+    "expected_source": "thornwarden.md",
+    "expected_keywords": ["species", "tall", "hairy"]
+  },
+  {
+    "id": 9,
+    "question": "What is the Void Core and how was it destroyed?",
+    "expected_success": false,
+    "topic": "Void Core (deleted)",
+    "expected_source": "",
+    "expected_keywords": []
+  },
+  {
+    "id": 10,
+    "question": "Describe the different types of Flux Blades",
+    "expected_success": false,
+    "topic": "Flux Blade (deleted)",
+    "expected_source": "",
+    "expected_keywords": []
+  },
+  {
+    "id": 11,
+    "question": "What is the geography of Solrath?",
+    "expected_success": false,
+    "topic": "Solrath (deleted)",
+    "expected_source": "",
+    "expected_keywords": []
+  },
+  {
+    "id": 12,
+    "question": "What is the political system of the Galactic Senate in Synthara Chronicles?",
+    "expected_success": false,
+    "topic": "Galactic Senate (not in KB)",
+    "expected_source": "",
+    "expected_keywords": []
+  },
+  {
+    "id": 13,
+    "question": "Who is Darth Revan in the Synthara Chronicles universe?",
+    "expected_success": false,
+    "topic": "Darth Revan (not in KB)",
+    "expected_source": "",
+    "expected_keywords": []
+  }
+]

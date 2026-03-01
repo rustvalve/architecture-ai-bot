@@ -1,0 +1,315 @@
+{
+  "timestamp": "2026-03-01T13:15:52.935336+00:00",
+  "total_questions": 13,
+  "matches": 10,
+  "accuracy": 76.92307692307693,
+  "results": [
+    {
+      "id": 1,
+      "question": "What is the Aetherian Order?",
+      "topic": "Aetherian Order",
+      "expected_success": true,
+      "actual_success": false,
+      "success_reason": "Contains 'I don't know'",
+      "match": false,
+      "keywords_check": {
+        "found": 4,
+        "total": 4,
+        "missing": []
+      },
+      "source_match": true,
+      "answer_length": 1547,
+      "chunks_found": 5,
+      "sources": [
+        "aetherian_order.md"
+      ],
+      "answer_preview": "Step 1: Review the context provided for the question about the Aetherian Order.\nThe context includes various references to the Aetherian Order, its history, and its practices, such as the Aetherian me..."
+    },
+    {
+      "id": 2,
+      "question": "Who is Kael Draven?",
+      "topic": "Kael Draven",
+      "expected_success": true,
+      "actual_success": true,
+      "success_reason": "Valid answer",
+      "match": true,
+      "keywords_check": {
+        "found": 2,
+        "total": 3,
+        "missing": [
+          "warrior"
+        ]
+      },
+      "source_match": true,
+      "answer_length": 1756,
+      "chunks_found": 5,
+      "sources": [
+        "kael_draven.md",
+        "vorinn_kael.md"
+      ],
+      "answer_preview": "Step 1: Understand the context of the question\nThe question asks about Kael Draven, and I have access to various information about him from different sources within the Synthara Chronicles universe.\n\n..."
+    },
+    {
+      "id": 3,
+      "question": "What is the Dominion of Krath?",
+      "topic": "Dominion of Krath",
+      "expected_success": true,
+      "actual_success": true,
+      "success_reason": "Valid answer",
+      "match": true,
+      "keywords_check": {
+        "found": 2,
+        "total": 3,
+        "missing": [
+          "authoritarian"
+        ]
+      },
+      "source_match": true,
+      "answer_length": 992,
+      "chunks_found": 5,
+      "sources": [
+        "dominion_of_krath.md",
+        "synth_flux.md",
+        "emberfall.md"
+      ],
+      "answer_preview": "Here are my reasoning steps:\n\n1. The context mentions that the Dominion of Krath was a fascist and dominionist dictatorship that replaced the The Accord at the end of the The Sundering.\n2. It also sta..."
+    },
+    {
+      "id": 4,
+      "question": "What is Synth Flux?",
+      "topic": "Synth Flux",
+      "expected_success": true,
+      "actual_success": true,
+      "success_reason": "Valid answer",
+      "match": true,
+      "keywords_check": {
+        "found": 3,
+        "total": 4,
+        "missing": [
+          "power"
+        ]
+      },
+      "source_match": true,
+      "answer_length": 913,
+      "chunks_found": 5,
+      "sources": [
+        "synth_flux.md",
+        "umbral.md"
+      ],
+      "answer_preview": "Answer:\nBased on the provided context, Synth Flux can be described as follows:\n\nReasoning steps:\n- The context mentions various names for Synth Flux throughout galactic history.\n- It states that Synth..."
+    },
+    {
+      "id": 5,
+      "question": "Who is Master Zephyr?",
+      "topic": "Master Zephyr",
+      "expected_success": true,
+      "actual_success": true,
+      "success_reason": "Valid answer",
+      "match": true,
+      "keywords_check": {
+        "found": 2,
+        "total": 3,
+        "missing": [
+          "teacher"
+        ]
+      },
+      "source_match": true,
+      "answer_length": 1774,
+      "chunks_found": 5,
+      "sources": [
+        "master_zephyr.md"
+      ],
+      "answer_preview": "Step 1: The context mentions that Master Zephyr was the Aetherian Master of Lord Serath, who ultimately pronounced his commitment to the Aetherian Order. This suggests a connection between Master Zeph..."
+    },
+    {
+      "id": 6,
+      "question": "Describe the planet Axiom Prime",
+      "topic": "Axiom Prime",
+      "expected_success": true,
+      "actual_success": true,
+      "success_reason": "Valid answer",
+      "match": true,
+      "keywords_check": {
+        "found": 2,
+        "total": 3,
+        "missing": [
+          "capital"
+        ]
+      },
+      "source_match": true,
+      "answer_length": 1149,
+      "chunks_found": 5,
+      "sources": [
+        "axiom_prime.md"
+      ],
+      "answer_preview": "Here are my reasoning steps:\n\n1. The context describes Axiom Prime as an ecumenopolis, meaning it's a city-covered planet.\n2. The planet is home to trillions of citizens from various humanoid and alie..."
+    },
+    {
+      "id": 7,
+      "question": "What is the Umbral Order?",
+      "topic": "Umbral Order",
+      "expected_success": true,
+      "actual_success": true,
+      "success_reason": "Valid answer",
+      "match": true,
+      "keywords_check": {
+        "found": 3,
+        "total": 3,
+        "missing": []
+      },
+      "source_match": true,
+      "answer_length": 1333,
+      "chunks_found": 5,
+      "sources": [
+        "aetherian_order.md",
+        "umbral.md"
+      ],
+      "answer_preview": "Here are my reasoning steps:\n\n1. The context describes the emergence of the Umbral Order as a result of a schism within the Aetherian Order.\n2. This schism was caused by a rogue Aetherian who explored..."
+    },
+    {
+      "id": 8,
+      "question": "Who are the Thornwardens?",
+      "topic": "Thornwardens",
+      "expected_success": true,
+      "actual_success": true,
+      "success_reason": "Valid answer",
+      "match": true,
+      "keywords_check": {
+        "found": 1,
+        "total": 3,
+        "missing": [
+          "tall",
+          "hairy"
+        ]
+      },
+      "source_match": true,
+      "answer_length": 1959,
+      "chunks_found": 5,
+      "sources": [
+        "thornwarden.md",
+        "grothar.md"
+      ],
+      "answer_preview": "To answer this question using the context provided:\n\n1. **Context Summary**: The text describes Thornwardens as a species with unique physical characteristics (extendable claws, thick coat of hair, ro..."
+    },
+    {
+      "id": 9,
+      "question": "What is the Void Core and how was it destroyed?",
+      "topic": "Void Core (deleted)",
+      "expected_success": false,
+      "actual_success": false,
+      "success_reason": "Contains 'I don't know'",
+      "match": true,
+      "keywords_check": {
+        "found": 0,
+        "total": 0,
+        "missing": []
+      },
+      "source_match": null,
+      "answer_length": 954,
+      "chunks_found": 5,
+      "sources": [
+        "dominion_of_krath.md",
+        "renn_korval.md",
+        "kael_draven.md",
+        "star_drifter.md"
+      ],
+      "answer_preview": "Step 1: Analyze the context to understand what the Void Core is.\n- The context mentions that Director Orson Kvornnic and High Marshal Krell decided to test the capability of the Empire's new superweap..."
+    },
+    {
+      "id": 10,
+      "question": "Describe the different types of Flux Blades",
+      "topic": "Flux Blade (deleted)",
+      "expected_success": false,
+      "actual_success": true,
+      "success_reason": "Valid answer",
+      "match": false,
+      "keywords_check": {
+        "found": 0,
+        "total": 0,
+        "missing": []
+      },
+      "source_match": null,
+      "answer_length": 777,
+      "chunks_found": 5,
+      "sources": [
+        "aetherian_order.md",
+        "vorinn_kael.md",
+        "synth_flux.md",
+        "kael_draven.md"
+      ],
+      "answer_preview": "To answer this question, I will follow these steps:\n\n1. Look for any mentions or descriptions of Flux Blade types within the provided context.\n2. Check if there are any specific details about their de..."
+    },
+    {
+      "id": 11,
+      "question": "What is the geography of Solrath?",
+      "topic": "Solrath (deleted)",
+      "expected_success": false,
+      "actual_success": true,
+      "success_reason": "Valid answer",
+      "match": false,
+      "keywords_check": {
+        "found": 0,
+        "total": 0,
+        "missing": []
+      },
+      "source_match": null,
+      "answer_length": 1294,
+      "chunks_found": 5,
+      "sources": [
+        "emberfall.md",
+        "master_zephyr.md",
+        "vorinn_kael.md",
+        "vex_morran.md"
+      ],
+      "answer_preview": "Step 1: The question asks about the geography of Solrath, so I will look for any information related to this planet in the provided context.\n\nStep 2: Upon reviewing the context, I see that there are s..."
+    },
+    {
+      "id": 12,
+      "question": "What is the political system of the Galactic Senate in Synthara Chronicles?",
+      "topic": "Galactic Senate (not in KB)",
+      "expected_success": false,
+      "actual_success": false,
+      "success_reason": "Contains 'I don't know'",
+      "match": true,
+      "keywords_check": {
+        "found": 0,
+        "total": 0,
+        "missing": []
+      },
+      "source_match": null,
+      "answer_length": 415,
+      "chunks_found": 5,
+      "sources": [
+        "queen_elyra.md",
+        "serenia.md",
+        "magnate.md",
+        "dominion_of_krath.md"
+      ],
+      "answer_preview": "Here are my reasoning steps:\n\n1. The context does not explicitly describe the political system of the Galactic Senate.\n2. I can infer that the Galactic Senate, or at least the Conclave on Axiom Prime ..."
+    },
+    {
+      "id": 13,
+      "question": "Who is Darth Revan in the Synthara Chronicles universe?",
+      "topic": "Darth Revan (not in KB)",
+      "expected_success": false,
+      "actual_success": false,
+      "success_reason": "Contains 'I don't know'",
+      "match": true,
+      "keywords_check": {
+        "found": 0,
+        "total": 0,
+        "missing": []
+      },
+      "source_match": null,
+      "answer_length": 254,
+      "chunks_found": 5,
+      "sources": [
+        "grothar.md",
+        "queen_elyra.md",
+        "emberfall.md",
+        "kira_vex.md"
+      ],
+      "answer_preview": "Step 1: I need to determine if Darth Revan is mentioned in the provided context.\n\nStep 2: The context does not mention Darth Revan.\n\nStep 3: Since Darth Revan is not mentioned, I do not have enough in..."
+    }
+  ]
+}

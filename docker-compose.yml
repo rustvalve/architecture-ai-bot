@@ -1,0 +1,12 @@
+services:
+  bot:
+    build: .
+    env_file: telegram_bot/.env
+    environment:
+      - OLLAMA_HOST=http://host.docker.internal:11434
+    volumes:
+      - hf_cache:/app/.cache
+    restart: unless-stopped
+
+volumes:
+  hf_cache:

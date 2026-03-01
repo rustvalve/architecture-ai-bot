@@ -1,0 +1,1 @@
+#REDIRECT Emperor Palpatine (reference book)
