@@ -1,0 +1,14 @@
+.venv/
+.venv
+.git/
+__pycache__/
+*.py[cod]
+.cache/
+screenshoots/
+raw_pages/
+knowledge_base_backup/
+diagrams/
+scripts/
+*.npy
+.DS_Store
+telegram_bot/.env

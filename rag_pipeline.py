@@ -41,6 +41,7 @@ os.environ.setdefault("HF_HOME", str(_PROJECT_ROOT / ".cache" / "huggingface"))
 os.environ.setdefault("TRANSFORMERS_CACHE", str(_PROJECT_ROOT / ".cache" / "transformers"))
 
 OLLAMA_MODEL: str = os.environ.get("OLLAMA_MODEL", "llama3.2")
+OLLAMA_BASE_URL: str = os.environ.get("OLLAMA_HOST", "http://localhost:11434")
 N_RESULTS: int = 5
 
 # Фиксированные вопросы-«якоря» для few-shot примеров.
@@ -158,7 +159,7 @@ def _build_chain(model: str = OLLAMA_MODEL, n_results: int = N_RESULTS):
     from langchain_ollama import OllamaLLM
 
     prompt = _build_prompt()
-    llm = OllamaLLM(model=model)
+    llm = OllamaLLM(model=model, base_url=OLLAMA_BASE_URL)
     retriever = FaissKnowledgeRetriever(n_results=n_results)
     return RetrievalQA.from_chain_type(
         llm=llm,
